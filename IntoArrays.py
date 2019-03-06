@@ -5,12 +5,15 @@ import PIL.Image
 from module import *
 import numpy as np
 import matplotlib.pyplot as plt
+import cv2
+
+#NEED TO install matplotlib and CV to work
 
 try:
     #Get the image file into our 'original' variable
-    orignal = Image.open("sunspots.jpg")
+    original = Image.open('sunspots.jpg')
     #Get what we want
-    width, height = orignial.size
+    width, height = original.size
     #Print data
     print("The sie of the image is: ")
     print(original.format, original.size, original.mode)
@@ -28,10 +31,15 @@ try:
 
     #Save the fragment to compare
     #First, the array is converted into unit8 and then into an Image file
-    Image.fromarray(b.astype(np.uint8)).save("fragment.jpg")
+    Image.fromarray(b.astype(np.uint8)).save('fragment.jpg')
 
     #Just to be sure
     print(b)
-        
+
+    #Use Canny Edge Detection to identify the sun
+    #edged = cv2.Canny(original, 100, 100)
+    #edged.save('CannySun.jpg')
 except:
     print("Unable to open file...")
+
+
