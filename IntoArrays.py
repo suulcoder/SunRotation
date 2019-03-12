@@ -22,12 +22,13 @@ print(original.format, original.size, original.mode)
 #Convert to greyscale
 mod = original.convert('L')
 #Save in new file to compare
-mod.save('sunspotsBW.jpg') 
+#mod.save('sunspotsBW.jpg') 
 
 #Create an array with the float32 values of the pixels of the image
-array = np.asarray(mod.resize((10,10)), dtype=np.float32)
+array = np.asarray(mod.resize((50,50)), dtype=np.float32)
 #Fragment of the image
 respuesta = []
+print(array)
 b = array#[0:200, 0:200]
 for i in b:
     lista= []
