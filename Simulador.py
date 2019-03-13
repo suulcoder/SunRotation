@@ -64,7 +64,7 @@ class Matrix(object):
 					encontrado = True
 				contadorx=contadorx+1
 			contadory=contadory+1
-		return (final-inicio)		
+		return (final-inicio)/2		
 		
 
 tamaño = 130
