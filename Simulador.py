@@ -45,8 +45,29 @@ class Matrix(object):
 				contadorx=contadorx+1
 			contadory=contadory+1
 		return [0,0]
+
+	def getSunRadio(self):
+		contadory=0
+		inicio = 0
+		final = 0
+		encontrado = False
+		for linea in self.arg:
+			contadorx=0
+			for pixel in linea:
+				if(pixel==1):
+					final=contadory
+				try:
+					if(pixel==1 and encontrado==False):
+						encontrado=True
+						inicio = contadory		
+				except Exception as e:
+					encontrado = True
+				contadorx=contadorx+1
+			contadory=contadory+1
+		return (final-inicio)		
 		
 
+tamaño = 130
 #Tomamos los datos
 fileDir = os.path.dirname(os.path.realpath('__file__'))
 filename = os.path.join(fileDir, 'imagenes/')
@@ -58,7 +79,7 @@ for image in range(1,5):
 	original = Image.open(filename+'/'+str(image)+'.jpg')
 	#Convertimos a escala de grises
 	mod = original.convert('L')
-	array = np.asarray(mod.resize((130,130)), dtype=np.float32)
+	array = np.asarray(mod.resize((tamaño,tamaño)), dtype=np.float32)
 	respuesta = []
 	b = array
 	#Convertimos a bianrio
@@ -72,14 +93,16 @@ for image in range(1,5):
 	    respuesta.append(lista)
 	matrix = Matrix(respuesta)
 	respuesta = matrix.getZero()
-	print(fechas[0])
+	sunRadio = matrix.getSunRadio()
+	print(sunRadio)
 	with open('data.csv',mode='a') as document:
 		document = csv.writer(document,delimiter=',',quoting=csv.QUOTE_ALL)
 		fecha = fechas[image-1]
 		fecha = fecha.replace("\n"," ")
 		fecha = fecha.replace("\t"," ")
-		vertical = str(respuesta[1])
-		document.writerow([fecha,str(respuesta[0]),vertical])
+		vertical = str(np.arcsin((respuesta[1]-(tamaño/2))/sunRadio))
+		horizontal = str(np.arcsin((respuesta[0]-(tamaño/2))/sunRadio))
+		document.writerow([fecha,horizontal,vertical])
 df = pd.read_csv('data.csv')
 print(df)
 npMatrix = np.matrix(df)
