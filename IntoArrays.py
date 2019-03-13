@@ -13,7 +13,7 @@ import cv2
 original = Image.open('sunspots.jpg')
 #Get what we want
 width, height = original.size
-original.resize((200, 200))
+original.resize((400, 400))
 #Print data
 print("The sie of the image is: ")
 print(original.format, original.size, original.mode)
