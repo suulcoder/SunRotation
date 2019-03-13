@@ -67,7 +67,7 @@ class Matrix(object):
 		return (final-inicio)/2		
 		
 
-tamaño = 130
+tamaño = 320
 #Tomamos los datos
 fileDir = os.path.dirname(os.path.realpath('__file__'))
 filename = os.path.join(fileDir, 'imagenes/')
@@ -105,18 +105,4 @@ for image in range(1,5):
 		document.writerow([fecha,horizontal,vertical])
 df = pd.read_csv('data.csv')
 print(df)
-npMatrix = np.matrix(df)
-x, y = npMatrix[:0],npMatrix[:1]
-x, y = x.reshape(-1,1), y.reshape(-1, 1)
-lin_regression = LinearRegression()
-lin_regression.fit(x,y)
-m = lin_regression.coef_(0)
-b = lin_regression.intercept_
-print('formula: y = {0}x + {1}'.format(m,b))
-plt.scatter(X,Y,color='blue')
-plt.pyplot([0,100],[b.m*100+b],'r')
-plt.tittle('Linear Regression',fontsize=20)
-plt.xlabel('X',fontsize=15)
-plt.ylabel('Y',fontsize=15)
-
 

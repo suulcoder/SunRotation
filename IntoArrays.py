@@ -2,7 +2,6 @@ from __future__ import print_function
 import sys
 from PIL import Image
 import PIL.Image
-from module import *
 import numpy as np
 import matplotlib.pyplot as plt
 import cv2
