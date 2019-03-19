@@ -67,15 +67,15 @@ class Matrix(object):
 		return (final-inicio)/2		
 		
 
-tamaño = 70
+tamaño = 215
 #Tomamos los datos
 fileDir = os.path.dirname(os.path.realpath('__file__'))
-filename = os.path.join(fileDir, 'sample12008/')
+filename = os.path.join(fileDir, 'sample22009/')
 #A continuacion se toman las fechas
-with open("sample12008.txt") as f:
+with open("sample22009.txt") as f:
     fechas = f.readlines()
 #A continuacion se toman las imagenes
-for image in range(1,10):
+for image in range(1,7):
 	original = Image.open(filename+'/'+str(image)+'.jpg')
 	#Convertimos a escala de grises
 	mod = original.convert('L')
@@ -95,7 +95,7 @@ for image in range(1,10):
 	respuesta = matrix.getZero()
 	sunRadio = matrix.getSunRadio()
 	print(sunRadio)
-	with open('dataUnoOcho.csv',mode='a') as document:
+	with open('dataDosNueve.csv',mode='a') as document:
 		document = csv.writer(document,delimiter=',',quoting=csv.QUOTE_ALL)
 		fecha = fechas[image-1]
 		fecha = fecha.replace("\n"," ")
@@ -103,6 +103,6 @@ for image in range(1,10):
 		vertical = str(np.arcsin((respuesta[1]-(tamaño/2))/sunRadio))
 		horizontal = str(np.arcsin((respuesta[0]-(tamaño/2))/sunRadio))
 		document.writerow([fecha,horizontal,vertical])
-df = pd.read_csv('dataUnoOcho.csv')
+df = pd.read_csv('dataDosNueve.csv')
 print(df)
 
