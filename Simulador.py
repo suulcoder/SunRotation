@@ -14,96 +14,93 @@ Saul Contreras
 Marco Fuentes
 Maria Jose Castro
 
-Proyecto 1 - Fisica 2:
-
-El siguiente proyecto consiste en un simulador, el objetivo de este programa es tomar fotos proporcionadas
-por el SOHO, solar and helioscopic observatory de la NASA, convirtiendolas en una estructura de datos, donde
-se realizaran ciertos calculos para calcular el angulo en que se posiciona un sunsput en el sol. Para luego
-devolver una tabla de angulo vs tiempo, para calcular la velocidad angular de dicho angulo es necesario realizar
-la regresion de todos las posiciones en el cambio del tiempo
+The function of the following program is to convert a serie of images, of the SOHO (solar and helioscopic observatory)
+from NASA, and convert them in a Matrix where 0 are the pixeles wich color were black, and 1 for pixels with other colors.
+The program will return in a csv the information with the angle where the sunspot was found. 
 """
 
 class Matrix(object):
-	"""Nos permite obtener el susnsput
-	ubicado en una matrix, el parametro arg
-	es un array de arrays, donde se encuentran
-	digitos binarios."""
+	"""This class is a matrix that contains an previus image where:
+		 black pixeles were converted into 0s 
+		 and white pixels were converted into 1s"""
 	def __init__(self, arg):
 		self.arg = arg
 		
-	def getZero(self):
-		contadory=0
-		for linea in self.arg:
-			contadorx=0
-			for pixel in linea:
+	def getZero(self):#This method returns the coordenates i,j of an entry wich value is 0 and where their neighbors are 1s
+		counter_y=0
+		for line in self.arg:
+			counter_x=0
+			for pixel in line:
 				if pixel==0:
 					try:
-						if(linea[contadorx-1]==1 and linea[contadorx+1]==1 and self.arg[contadory-1][contadorx]==1 and self.arg[contadory+1][contadorx]==1):
-							retorno = [contadorx,contadory]
-							return retorno		
+						if(line[counter_x-1]==1 and line[counter_x+1]==1 and self.arg[counter_y-1][counter_x]==1 and self.arg[counter_y+1][counter_x]==1):
+							toreturn = [counter_x,counter_y]
+							return toreturn		
 					except Exception as e:
 						return [0,0]
-				contadorx=contadorx+1
-			contadory=contadory+1
+				counter_x=counter_x+1
+			counter_y=counter_y+1
 		return [0,0]
 
-	def getSunRadio(self):
-		contadory=0
-		inicio = 0
-		final = 0
-		encontrado = False
-		for linea in self.arg:
-			contadorx=0
-			for pixel in linea:
+	def getSunRadio(self): #It obtain sun radius base on the number of pixels of the matrix
+		counter_y=0
+		start = 0
+		end = 0
+		found = False
+		for line in self.arg:
+			counter_x=0
+			for pixel in line:
 				if(pixel==1):
-					final=contadory
+					end=counter_y
 				try:
-					if(pixel==1 and encontrado==False):
-						encontrado=True
-						inicio = contadory		
+					if(pixel==1 and found==False):
+						found=True
+						start = counter_y		
 				except Exception as e:
-					encontrado = True
-				contadorx=contadorx+1
-			contadory=contadory+1
-		return (final-inicio)/2		
+					found = True
+				counter_x=counter_x+1
+			counter_y=counter_y+1
+		return (end-start)/2		
 		
+#---------------------------------------------------------------------------------------------------------
+size = 130#Change to get more data
 
-tamaño = 215
-#Tomamos los datos
+
+#read data
 fileDir = os.path.dirname(os.path.realpath('__file__'))
-filename = os.path.join(fileDir, 'sample22009/')
-#A continuacion se toman las fechas
-with open("sample22009.txt") as f:
-    fechas = f.readlines()
-#A continuacion se toman las imagenes
-for image in range(1,7):
+filename = os.path.join(fileDir, 'sample12006/')#You must change the number with the number of your folder
+#read dates
+with open("sample12006.txt") as f:
+    dates = f.readlines()
+#take each image
+for image in range(1,7):#You must change the range, it must have the number of pictures that your serie has 
 	original = Image.open(filename+'/'+str(image)+'.jpg')
-	#Convertimos a escala de grises
+	#We convert the image in a gray-scale picture
 	mod = original.convert('L')
-	array = np.asarray(mod.resize((tamaño,tamaño)), dtype=np.float32)
-	respuesta = []
+	array = np.asarray(mod.resize((size,size)), dtype=np.float32)
+	answer = []
 	b = array
-	#Convertimos a bianrio
+	#Convert to binary
 	for i in b:
-	    lista= []
+	    listOne= []
 	    for pixel in i:
 	        if(pixel<50):
-	            lista.append(0)
+	            listOne.append(0)
 	        elif(pixel>50):
-	            lista.append(1)
-	    respuesta.append(lista)
-	matrix = Matrix(respuesta)
-	respuesta = matrix.getZero()
-	sunRadio = matrix.getSunRadio()
-	print(sunRadio)
-	with open('dataDosNueve.csv',mode='a') as document:
+	            listOne.append(1)
+	    answer.append(listOne)
+	matrix = Matrix(answer)
+	answer = matrix.getZero()#Get angle
+	sunRadius = matrix.getSunRadio()#Get radius
+	print(sunRadius)#Print radius
+	with open('dataunoseis.csv',mode='a') as document:#Write data
 		document = csv.writer(document,delimiter=',',quoting=csv.QUOTE_ALL)
-		fecha = fechas[image-1]
-		fecha = fecha.replace("\n"," ")
-		fecha = fecha.replace("\t"," ")
-		vertical = str(np.arcsin((respuesta[1]-(tamaño/2))/sunRadio))
-		horizontal = str(np.arcsin((respuesta[0]-(tamaño/2))/sunRadio))
-		document.writerow([fecha,horizontal,vertical])
-df = pd.read_csv('dataDosNueve.csv')
-print(df)
+		date = dates[image-1]
+		date = date.replace("\n"," ")
+		date = date.replace("\t"," ")
+		vertical = str(np.arcsin((answer[1]-(size/2))/sunRadius))
+		horizontal = str(np.arcsin((answer[0]-(size/2))/sunRadius))
+		document.writerow([date,horizontal,vertical])
+df = pd.read_csv('dataunoseis.csv')
+print(df)#Print data
 

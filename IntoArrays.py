@@ -10,10 +10,20 @@ import cv2
 
 #try:
 #Get the image file into our 'original' variable
-original = Image.open('sunspots.jpg')
+
+
+
+
+#Just for fun change the name of the image 
+original = Image.open('phone .jpg')
+
+
+
+
+
 #Get what we want
 width, height = original.size
-original.resize((400, 400))
+original.resize((1000, 1000))
 #Print data
 print("The sie of the image is: ")
 print(original.format, original.size, original.mode)
@@ -24,7 +34,7 @@ mod = original.convert('L')
 #mod.save('sunspotsBW.jpg') 
 
 #Create an array with the float32 values of the pixels of the image
-array = np.asarray(mod.resize((50,50)), dtype=np.float32)
+array = np.asarray(mod.resize((70,70)), dtype=np.float32)
 #Fragment of the image
 respuesta = []
 print(array)
