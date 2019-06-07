@@ -10,6 +10,6 @@ Before running:
 -You must change the name of the csv file on line 104. It will contain the results. 
 
 Then you must run the program Simulator.py, for better results you must change the variable "size" on line 71, this variable sets the number
-of columns and rows that the matrix will have, and run again the program. 
+of columns and rows that the matrix will have, and run again the program. This number must not be big because it will take a lot of pixels for one sunspot and must not be small because it will not even read the sunspot.
 
 The program returns the angle on the axis x and on the axis y
