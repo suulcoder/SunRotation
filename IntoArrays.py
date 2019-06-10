@@ -2,8 +2,8 @@ from __future__ import print_function
 import sys
 from PIL import Image
 import PIL.Image
-import numpy as np
 import matplotlib.pyplot as plt
+import numpy as np
 import cv2
 
 #NEED TO install matplotlib and CV to work
@@ -15,7 +15,7 @@ import cv2
 
 
 #Just for fun change the name of the image 
-original = Image.open('phone .jpg')
+original = Image.open('sunspots.jpg')
 
 
 
@@ -25,8 +25,8 @@ original = Image.open('phone .jpg')
 width, height = original.size
 original.resize((1000, 1000))
 #Print data
-print("The sie of the image is: ")
-print(original.format, original.size, original.mode)
+#print("The sie of the image is: ")
+#print(original.format, original.size, original.mode)
 
 #Convert to greyscale
 mod = original.convert('L')
@@ -34,10 +34,10 @@ mod = original.convert('L')
 #mod.save('sunspotsBW.jpg') 
 
 #Create an array with the float32 values of the pixels of the image
-array = np.asarray(mod.resize((70,70)), dtype=np.float32)
+array = np.asarray(mod.resize((15,15)), dtype=np.float32)
 #Fragment of the image
 respuesta = []
-print(array)
+#print(array)
 b = array#[0:200, 0:200]
 for i in b:
     lista= []

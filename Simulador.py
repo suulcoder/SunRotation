@@ -18,7 +18,8 @@ The function of the following program is to convert a serie of images, of the SO
 from NASA, and convert them in a Matrix where 0 are the pixeles wich color were black, and 1 for pixels with other colors.
 The program will return in a csv the information with the angle where the sunspot was found. 
 """
-
+time = np.array([])
+h = np.array([])
 class Matrix(object):
 	"""This class is a matrix that contains an previus image where:
 		 black pixeles were converted into 0s 
@@ -63,17 +64,18 @@ class Matrix(object):
 		return (end-start)/2		
 		
 #---------------------------------------------------------------------------------------------------------
-size = 130#Change to get more data
+size = 20#Change to get more data
 
 
 #read data
 fileDir = os.path.dirname(os.path.realpath('__file__'))
-filename = os.path.join(fileDir, 'sample12006/')#You must change the number with the number of your folder
+filename = os.path.join(fileDir, 'sample22009/')#You must change the number with the number of your folder
 #read dates
 with open("sample12006.txt") as f:
     dates = f.readlines()
 #take each image
-for image in range(1,7):#You must change the range, it must have the number of pictures that your serie has 
+rango = 6
+for image in range(1,rango):#You must change the range, it must have the number of pictures that your serie has 
 	original = Image.open(filename+'/'+str(image)+'.jpg')
 	#We convert the image in a gray-scale picture
 	mod = original.convert('L')
@@ -93,7 +95,7 @@ for image in range(1,7):#You must change the range, it must have the number of p
 	answer = matrix.getZero()#Get angle
 	sunRadius = matrix.getSunRadio()#Get radius
 	print(sunRadius)#Print radius
-	with open('dataunoseis.csv',mode='a') as document:#Write data
+	with open('ejemplo.csv',mode='a') as document:#Write data
 		document = csv.writer(document,delimiter=',',quoting=csv.QUOTE_ALL)
 		date = dates[image-1]
 		date = date.replace("\n"," ")
@@ -101,6 +103,12 @@ for image in range(1,7):#You must change the range, it must have the number of p
 		vertical = str(np.arcsin((answer[1]-(size/2))/sunRadius))
 		horizontal = str(np.arcsin((answer[0]-(size/2))/sunRadius))
 		document.writerow([date,horizontal,vertical])
-df = pd.read_csv('dataunoseis.csv')
-print(df)#Print data
-
+		if (horizontal != "nan"):
+			time = np.append(time,image)#agrego contador de tiempo
+			h = np.append(h,np.arcsin((answer[0]-(size/2))/sunRadius))	
+plt.plot(time, h)
+plt.ylabel('Posicion horizontal')
+plt.xlabel('Tiempo en dias')
+plt.title('Posicion angular del sunspot 1035')
+#plt.axis([0,time.shape[0],0,h.shape[0]])
+plt.show()
