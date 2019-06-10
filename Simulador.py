@@ -9,6 +9,22 @@ import cv2
 import pandas as pd
 from sklearn.linear_model import LinearRegression
 import csv
+# best_fit calculates the ecuation of best fit of the given data. Useful later
+def best_fit(X, Y):
+
+    xbar = sum(X)/len(X)
+    ybar = sum(Y)/len(Y)
+    n = len(X) # or len(Y)
+
+    numer = sum([xi*yi for xi,yi in zip(X, Y)]) - n * xbar * ybar
+    denum = sum([xi**2 for xi in X]) - n * xbar**2
+
+    b = numer / denum
+    a = ybar - b * xbar
+
+    bestFit =r'$\theta$ = {:.2f} + {:.2f}t'.format(a, b)
+
+    return a, b , bestFit
 """
 Saul Contreras
 Marco Fuentes
@@ -103,12 +119,30 @@ for image in range(1,rango):#You must change the range, it must have the number 
 		vertical = str(np.arcsin((answer[1]-(size/2))/sunRadius))
 		horizontal = str(np.arcsin((answer[0]-(size/2))/sunRadius))
 		document.writerow([date,horizontal,vertical])
+		#we store the data that can be recorded
 		if (horizontal != "nan"):
 			time = np.append(time,image)#agrego contador de tiempo
 			h = np.append(h,np.arcsin((answer[0]-(size/2))/sunRadius))	
-plt.plot(time, h)
-plt.ylabel('Posicion horizontal')
+
+a,b,ecuacion = best_fit(time,h)
+#posfit is a numpy array that contains the function of best fit of the data.
+posfit = [a + b*ti for ti in time]
+plt.plot(time,posfit)
+
+#here we calculate the r² coefficient
+reg = LinearRegression()
+reg.fit(time.reshape(-1,1),posfit)
+r2 = reg.score(time.reshape(-1,1),h)
+print("Valor de r2 es: "+str(r2))
+
+#plot the data as scatter points
+plt.scatter(time, h)
+plt.ylabel('Posicion angular horizontal')
 plt.xlabel('Tiempo en dias')
-plt.title('Posicion angular del sunspot 1035')
-#plt.axis([0,time.shape[0],0,h.shape[0]])
+plt.title('Posicion angular del sunspot')
+print(ecuacion)
+#Show the ecuation and the coefficient
+plt.text(1,0.5,ecuacion)
+plt.text(1,0.45,'r²='+str(r2))
+#Show the graph
 plt.show()
