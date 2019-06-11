@@ -10,6 +10,8 @@ import pandas as pd
 from sklearn.linear_model import LinearRegression
 import csv
 # best_fit calculates the ecuation of best fit of the given data. Useful later
+#This function was obtained from the stackOverflow answer posted by Aziz Alto on this page: https://stackoverflow.com/questions/22239691/code-for-best-fit-straight-line-of-a-scatter-plot-in-python
+# So credit to Aziz Alto on this function: best_fit
 def best_fit(X, Y):
 
     xbar = sum(X)/len(X)
